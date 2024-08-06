@@ -57,12 +57,21 @@ class GPModel(BOModel):
         if self.kernel is None:
             kern = GPy.kern.Matern52(self.input_dim, variance=1., ARD=self.ARD) #+ GPy.kern.Bias(self.input_dim)
         else:
-            kern = self.kernel
+            #kern = self.kernel
+            #A Added
+            kern = self.kernel(self.input_dim, variance=1., ARD=self.ARD)
+            
             self.kernel = None
 
         # --- define model
         noise_var = Y.var()*0.01 if self.noise_var is None else self.noise_var
-
+	
+	#A Consider adding:
+	#if self.exact_feval:
+        #    
+        #    noise_var = 1e-12 if self.noise_var is None else self.noise_var
+        
+	
         if not self.sparse:
             self.model = GPy.models.GPRegression(X, Y, kernel=kern, noise_var=noise_var, mean_function=self.mean_function)
         else:
@@ -70,7 +79,7 @@ class GPModel(BOModel):
 
         # --- restrict variance if exact evaluations of the objective
         if self.exact_feval:
-            self.model.Gaussian_noise.constrain_fixed(1e-6, warning=False)
+            self.model.Gaussian_noise.constrain_fixed(1e-12, warning=False)  #A used to be 10e-6
         else:
             # --- We make sure we do not get ridiculously small residual noise variance
             self.model.Gaussian_noise.constrain_bounded(1e-9, 1e6, warning=False) #constrain_positive(warning=False)

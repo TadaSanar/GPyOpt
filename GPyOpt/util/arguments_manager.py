@@ -51,7 +51,9 @@ class ArgumentsManager(object):
         cost_withGradients = cost_withGradients
         acquisition_jitter = self.kwargs.get('acquisition_jitter',0.01)
         acquisition_weight = self.kwargs.get('acquisition_weight',2)
-
+        ei_dft_params = self.kwargs.get('acq_fun_params', None) #A Added
+        verbose = self.kwargs.get('verbose') #A Added
+        
         # --- Choose the acquisition
         if acquisition_type is  None or acquisition_type =='EI':
             return AcquisitionEI(model, space, acquisition_optimizer, cost_withGradients, acquisition_jitter)
@@ -70,6 +72,9 @@ class ArgumentsManager(object):
 
         elif acquisition_type =='LCB_MCMC':
             return AcquisitionLCB_MCMC(model, space, acquisition_optimizer, None, acquisition_weight)
+        # A Added
+        elif acquisition_type =='EI_DF':
+            return AcquisitionEI_DF(model, space, acquisition_optimizer, cost_withGradients, acquisition_jitter, ei_dft_params, verbose)
 
         else:
             raise Exception('Invalid acquisition selected.')
