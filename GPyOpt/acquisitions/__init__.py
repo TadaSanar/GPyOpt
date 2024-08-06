@@ -10,6 +10,7 @@ from .LCB import AcquisitionLCB
 from .LCB_mcmc import AcquisitionLCB_MCMC
 from .LP import AcquisitionLP
 from .ES import AcquisitionEntropySearch
+from .EI_DF import AcquisitionEI_DF
 
 def select_acquisition(name):
     '''
@@ -31,5 +32,7 @@ def select_acquisition(name):
         return AcquisitionLP
     elif name == 'ES':
         return AcquisitionEntropySearch
+    elif name == 'EI_DF':
+        return AcquisitionEI_DF
     else:
         raise Exception('Invalid acquisition selected.')
