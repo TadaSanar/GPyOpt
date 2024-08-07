@@ -44,7 +44,7 @@ class AcquisitionEI_DF(AcquisitionBase):
             if 'df_model' in ei_df_params:
                 
                 # GPy GPRegression model.
-                self.constraint_model = ei_dft_params['df_model']
+                self.constraint_model = ei_df_params['df_model']
                 
             else:
                 
