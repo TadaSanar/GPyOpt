@@ -1,4 +1,16 @@
- # End of maintenance for GPyOpt
+# Description
+
+This is a fork of GPyOpt (latest version) with a data fusion feature and some other small edits aiming for improved operation with noisy data.
+
+The fork is intended to be used with repository HPER:
+
+* [HPER repository](https://github.com/TadaSanar/HPER/)
+
+See below the notifications regarding the end of maintenance of GPyOpt.
+
+Note: The data fusion feature is implemented in GPyOpt/acquisitions/EI_DF.py and can readily be implemented also in other Bayesian optimization packages.
+
+# End of maintenance for GPyOpt
 
 Dear GPyOpt community!
 
