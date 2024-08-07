@@ -143,7 +143,7 @@ class Design_space(object):
             variable.set_index_in_objective([counter_objective])
             counter_objective +=1
 
-            if variable.type is not 'categorical':
+            if variable.type != 'categorical':
                 variable.set_index_in_model([counter_model])
                 counter_model +=1
             else:
