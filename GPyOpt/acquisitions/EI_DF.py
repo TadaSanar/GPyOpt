@@ -174,7 +174,7 @@ def inv_sigmoid(mean, midpoint, beta):
     return f
     
         
-def calc_gradient_of_P(x, constraint_model, beta, midpoint, lengthscale):
+def calc_gradient_of_P(x, constraint_model, beta, midpoint):
     
     if constraint_model is None:
         
