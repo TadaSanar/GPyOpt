@@ -146,14 +146,14 @@ class AcquisitionEI_DF(AcquisitionBase):
         
         return f_acqu, df_acqu
 
-def calc_P(points, constraint_model, beta = 0.025, midpoint = 0):
+def calc_P(points, constraint_model, p_beta = 0.025, p_midpoint = 0):
     
     # GPy GPRegression model assumed.
     if constraint_model is not None:
     
         mean, _ = constraint_model.predict_noiseless(points)
         
-        propability = inv_sigmoid(mean, midpoint, beta)
+        propability = inv_sigmoid(mean, p_midpoint, p_beta)
     
     else:
         
@@ -162,19 +162,19 @@ def calc_P(points, constraint_model, beta = 0.025, midpoint = 0):
         
     return propability
 
-def inv_sigmoid(mean, midpoint, beta):
+def inv_sigmoid(mean, p_midpoint, p_beta):
     
     # Inverted because the negative/lower values are assumed better than high
     # ones. This choice was made because the original application for data
     # fusion was DFT Gibbs free energies, where compositions with negative
     # energies are the ones that are stable.
     
-    f = 1/(1+np.exp((mean-midpoint)/beta))
+    f = 1/(1+np.exp((mean-p_midpoint)/p_beta))
     
     return f
     
         
-def calc_gradient_of_P(x, constraint_model, beta, midpoint):
+def calc_gradient_of_P(x, constraint_model, p_beta, p_midpoint):
     
     if constraint_model is None:
         
@@ -195,9 +195,9 @@ def calc_gradient_of_P(x, constraint_model, beta, midpoint):
             x_l[:,i] = x_l[:,i] - delta_x/2
             x_u[:,i] = x_u[:,i] + delta_x/2
             
-            p_l = calc_P(x_l, constraint_model, beta, midpoint)
-            #p_c = calc_P(x, constraint_model, beta, midpoint)
-            p_u = calc_P(x_u, constraint_model, beta, midpoint)
+            p_l = calc_P(x_l, constraint_model, p_beta, p_midpoint)
+            #p_c = calc_P(x, constraint_model, p_beta, p_midpoint)
+            p_u = calc_P(x_u, constraint_model, p_beta, p_midpoint)
             
             g[:,i] =  np.ravel((p_u - p_l)/delta_x)
         
