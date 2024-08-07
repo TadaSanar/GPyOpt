@@ -85,7 +85,7 @@ class AcquisitionEI_DF(AcquisitionBase):
         
             verbose = config['verbose']
             
-        return AcquisitionEI(model, space, optimizer, cost_withGradients, jitter=config['jitter'], ei_df_params = ei_df_params)
+        return AcquisitionEI_DF(model, space, optimizer, cost_withGradients, jitter=config['jitter'], ei_df_params = ei_df_params)
 
     def _compute_acq(self, x):
         """
@@ -100,7 +100,7 @@ class AcquisitionEI_DF(AcquisitionBase):
         
         f_acqu = f_acqu * prob #A Added
         
-        if verbose:
+        if self.verbose:
         
             message = 'Exploitation ' + str(s*u*Phi*prob) + ', exploration ' + str(s*phi*prob) # Added
             print(message)
@@ -118,14 +118,14 @@ class AcquisitionEI_DF(AcquisitionBase):
         df_acqu = dsdx * phi - Phi * dmdx
         
         # A Added:
-        if verbose and np.any(np.isnan(x)):
+        if self.verbose and np.any(np.isnan(x)):
         
             message = 'x contains nan:\n ' + str(x)
             print(message)
         
         prob = calc_P(x, self.constraint_model, self.p_beta, self.p_midpoint) #A Added
         
-        if verbose:
+        if self.verbose:
             
             message = 'Exploitation ' + str(s*u*Phi*prob) + ', exploration ' + str(s*phi*prob) # Added
             print(message)
@@ -140,7 +140,7 @@ class AcquisitionEI_DF(AcquisitionBase):
         
         df_acqu = df_acqu * prob + f_acqu * d_prob
         
-        if verbose:
+        if self.verbose:
             
             print('acqu_P='+str(f_acqu)+', grad_acqu_P='+str(df_acqu))
         
