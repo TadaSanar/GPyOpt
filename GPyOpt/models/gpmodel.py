@@ -63,11 +63,10 @@ class GPModel(BOModel):
             
             self.kernel = None
 
-        # --- define model
         noise_var = Y.var()*0.01 if self.noise_var is None else self.noise_var
 	
-	#A Consider adding:
-	#if self.exact_feval:
+    	#A Consider adding:
+        #self.exact_feval:
         #    
         #    noise_var = 1e-12 if self.noise_var is None else self.noise_var
         

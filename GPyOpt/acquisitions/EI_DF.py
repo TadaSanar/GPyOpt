@@ -21,7 +21,7 @@ class AcquisitionEI_DF(AcquisitionBase):
 
     """
 
-    analytical_gradient_prediction = True
+    analytical_gradient_prediction = False
 
     def __init__(self, model, space, optimizer=None, cost_withGradients=None, jitter=0.01, ei_df_params=None, verbose = False):
         self.optimizer = optimizer
@@ -112,10 +112,15 @@ class AcquisitionEI_DF(AcquisitionBase):
         Computes the Expected Improvement and its derivative (has a very easy derivative!)
         """
         fmin = self.model.get_fmin()
+        print('1')
         m, s, dmdx, dsdx = self.model.predict_withGradients(x)
+        print('2')
         phi, Phi, u = get_quantiles(self.jitter, fmin, m, s)
+        print('3')
         f_acqu = s * (u * Phi + phi)
+        print('4')
         df_acqu = dsdx * phi - Phi * dmdx
+        print('5´')
         
         # A Added:
         if self.verbose and np.any(np.isnan(x)):
@@ -132,6 +137,7 @@ class AcquisitionEI_DF(AcquisitionBase):
             
             message = 'x='+str(x)+', acqu='+str(f_acqu)+', grad_acqu='+str(df_acqu) + ', P=' + str(prob)
             print(message)
+        
         
         f_acqu = f_acqu * prob #A Added
         

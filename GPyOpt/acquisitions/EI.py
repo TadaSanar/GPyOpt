@@ -18,7 +18,7 @@ class AcquisitionEI(AcquisitionBase):
 
     """
 
-    analytical_gradient_prediction = True
+    analytical_gradient_prediction = False
 
     def __init__(self, model, space, optimizer=None, cost_withGradients=None, jitter=0.01):
         self.optimizer = optimizer
@@ -37,6 +37,7 @@ class AcquisitionEI(AcquisitionBase):
         fmin = self.model.get_fmin()
         phi, Phi, u = get_quantiles(self.jitter, fmin, m, s)
         f_acqu = s * (u * Phi + phi)
+        
         return f_acqu
 
     def _compute_acq_withGradients(self, x):
@@ -48,4 +49,5 @@ class AcquisitionEI(AcquisitionBase):
         phi, Phi, u = get_quantiles(self.jitter, fmin, m, s)
         f_acqu = s * (u * Phi + phi)
         df_acqu = dsdx * phi - Phi * dmdx
+        
         return f_acqu, df_acqu

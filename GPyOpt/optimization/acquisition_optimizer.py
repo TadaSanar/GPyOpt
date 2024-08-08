@@ -57,7 +57,7 @@ class AcquisitionOptimizer(object):
         self.df = df
         self.f_df = f_df
 
-        ## --- Update the optimizer, in case context has beee passed.
+        ## --- Update the optimizer, in case context has been passed.
         self.optimizer = choose_optimizer(self.optimizer_name, self.context_manager.noncontext_bounds)
 
         ## --- Selecting the anchor points and removing duplicates
@@ -68,7 +68,7 @@ class AcquisitionOptimizer(object):
 
         ## -- Select the anchor points (with context)
         anchor_points = anchor_points_generator.get(duplicate_manager=duplicate_manager, context_manager=self.context_manager)
-
+        
         ## --- Applying local optimizers at the anchor points and update bounds of the optimizer (according to the context)
         optimized_points = [apply_optimizer(self.optimizer, a, f=f, df=None, f_df=f_df, duplicate_manager=duplicate_manager, context_manager=self.context_manager, space = self.space) for a in anchor_points]
         x_min, fx_min = min(optimized_points, key=lambda t:t[1])
