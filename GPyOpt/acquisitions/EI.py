@@ -4,6 +4,7 @@
 from .base import AcquisitionBase
 from ..util.general import get_quantiles
 
+
 class AcquisitionEI(AcquisitionBase):
     """
     Expected improvement acquisition function
@@ -18,7 +19,7 @@ class AcquisitionEI(AcquisitionBase):
 
     """
 
-    analytical_gradient_prediction = False
+    analytical_gradient_prediction = True
 
     def __init__(self, model, space, optimizer=None, cost_withGradients=None, jitter=0.01):
         self.optimizer = optimizer
@@ -33,7 +34,7 @@ class AcquisitionEI(AcquisitionBase):
         """
         Computes the Expected Improvement per unit of cost
         """
-        m, s = self.model.predict(x)
+        m, s = self.model.predict(x, with_noise = False) #A Added with_noise = False
         fmin = self.model.get_fmin()
         phi, Phi, u = get_quantiles(self.jitter, fmin, m, s)
         f_acqu = s * (u * Phi + phi)
@@ -45,7 +46,7 @@ class AcquisitionEI(AcquisitionBase):
         Computes the Expected Improvement and its derivative (has a very easy derivative!)
         """
         fmin = self.model.get_fmin()
-        m, s, dmdx, dsdx = self.model.predict_withGradients(x)
+        m, s, dmdx, dsdx = self.model.predict_withGradients(x, with_noise = False)  #A Added with_noise = False
         phi, Phi, u = get_quantiles(self.jitter, fmin, m, s)
         f_acqu = s * (u * Phi + phi)
         df_acqu = dsdx * phi - Phi * dmdx

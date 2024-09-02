@@ -59,7 +59,7 @@ class GPModel(BOModel):
         else:
             #kern = self.kernel
             #A Added
-            kern = self.kernel(self.input_dim, variance=1., ARD=self.ARD)
+            kern = self.kernel(self.input_dim, ARD=self.ARD) #A removed variance=1.
             
             self.kernel = None
 
@@ -81,7 +81,7 @@ class GPModel(BOModel):
             self.model.Gaussian_noise.constrain_fixed(1e-12, warning=False)  #A used to be 10e-6
         else:
             # --- We make sure we do not get ridiculously small residual noise variance
-            self.model.Gaussian_noise.constrain_bounded(1e-9, 1e6, warning=False) #constrain_positive(warning=False)
+            self.model.Gaussian_noise.constrain_bounded(1e-9, 1e12, warning=False) #constrain_positive(warning=False)
 
     def updateModel(self, X_all, Y_all, X_new, Y_new):
         """
@@ -136,12 +136,12 @@ class GPModel(BOModel):
         """
         return self.model.predict(self.model.X)[0].min()
 
-    def predict_withGradients(self, X):
+    def predict_withGradients(self, X, with_noise = True): #A Added with_noise = True
         """
         Returns the mean, standard deviation, mean gradient and standard deviation gradient at X.
         """
         if X.ndim==1: X = X[None,:]
-        m, v = self.model.predict(X)
+        m, v = self.model.predict(X, include_likelihood = with_noise) #A
         v = np.clip(v, 1e-10, np.inf)
         dmdx, dvdx = self.model.predictive_gradients(X)
         dmdx = dmdx[:,:,0]
