@@ -100,17 +100,7 @@ class AcquisitionEI_DF(AcquisitionBase):
         
         f_acqu = f_acqu * prob #A Added
         
-        if self.verbose:
-        
-            message = '\nExploitation ' + str(s[0]*u[0]*Phi[0]*prob[0]) + ', exploration ' + str(s[0]*phi[0]*prob[0]) + '\n' # Added
-            print(message)
-            print('\n p_beta, p_midpoint, x, mean, P: ', self.p_beta, 
-                  self.p_midpoint, x[0], self.constraint_model.predict_noiseless(x[[0],:])[0], prob[0], '\n')
-        
-        #message = '\nExploitation ' + str(s[0]*u[0]*Phi[0]*prob[0]) + ', exploration ' + str(s[0]*phi[0]*prob[0]) + '\n' # Added
-        #print(message)
-        
-        
+                
         return f_acqu
 
     def _compute_acq_withGradients(self, x):
@@ -131,13 +121,6 @@ class AcquisitionEI_DF(AcquisitionBase):
         
         prob = calc_P(x, self.constraint_model, self.p_beta, self.p_midpoint) #A Added
         
-        if self.verbose:
-            
-            message = 'Exploitation ' + str(s*u*Phi*prob) + ', exploration ' + str(s*phi*prob) # Added
-            print(message)
-            
-            message = 'x='+str(x)+', acqu='+str(f_acqu)+', grad_acqu='+str(df_acqu) + ', P=' + str(prob)
-            print(message)
         
         
         f_acqu = f_acqu * prob #A Added
