@@ -4,7 +4,8 @@
 from .base import AcquisitionBase
 from ..util.general import get_quantiles
 
-from EI_DF import calc_P, calc_gradient_of_P
+import GPy #A Added
+import numpy as np
 
 class AcquisitionLCB_DF(AcquisitionBase):
     """
@@ -108,3 +109,59 @@ class AcquisitionLCB_DF(AcquisitionBase):
         
         return f_acqu, df_acqu
 
+def calc_P(points, constraint_model, p_beta = 0.025, p_midpoint = 0):
+    
+    # GPy GPRegression model assumed.
+    if constraint_model is not None:
+    
+        mean, _ = constraint_model.predict_noiseless(points)
+        
+        propability = inv_sigmoid(mean, p_midpoint, p_beta)
+    
+    else:
+        
+        # No data fusion data so no grounds for declaring any area less good.
+        propability= np.ones(shape = (points.shape[0], 1))
+        
+    return propability
+
+def inv_sigmoid(mean, p_midpoint, p_beta):
+    
+    # Inverted because the negative/lower values are assumed better than high
+    # ones. This choice was made because the original application for data
+    # fusion was DFT Gibbs free energies, where compositions with negative
+    # energies are the ones that are stable.
+    
+    f = 1/(1+np.exp((mean-p_midpoint)/p_beta))
+    
+    return f
+    
+        
+def calc_gradient_of_P(x, constraint_model, p_beta, p_midpoint):
+    
+    if constraint_model is None:
+        
+        g = np.zeros(x.shape)
+        
+    else:
+        
+        # Step size for numerical gradient.
+        delta_x = constraint_model.kern.lengthscale/1000
+        
+        g = np.empty(x.shape)
+        
+        for i in range(x.shape[1]):
+            
+            x_l = x.copy()
+            x_u = x.copy()
+            
+            x_l[:,i] = x_l[:,i] - delta_x/2
+            x_u[:,i] = x_u[:,i] + delta_x/2
+            
+            p_l = calc_P(x_l, constraint_model, p_beta, p_midpoint)
+            #p_c = calc_P(x, constraint_model, p_beta, p_midpoint)
+            p_u = calc_P(x_u, constraint_model, p_beta, p_midpoint)
+            
+            g[:,i] =  np.ravel((p_u - p_l)/delta_x)
+        
+        return g
