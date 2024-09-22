@@ -35,7 +35,7 @@ class AnchorPointsGenerator(object):
 
         ## --- Generate initial design
         X = initial_design(self.design_type, space, self.num_samples)
-
+        
         if unique:
             sorted_design = sorted(list({tuple(x) for x in X}))
             X = space.unzip_inputs(np.vstack(sorted_design))
@@ -65,7 +65,7 @@ class AnchorPointsGenerator(object):
         scores = self.get_anchor_point_scores(X)
 
         anchor_points = X[np.argsort(scores)[:min(len(scores),num_anchor)], :]
-
+        
         return anchor_points
 
 
@@ -90,7 +90,7 @@ class ThompsonSamplingAnchorPointsGenerator(AnchorPointsGenerator):
 
 class ObjectiveAnchorPointsGenerator(AnchorPointsGenerator):
 
-    def __init__(self, space, design_type, objective, num_samples=1000):
+    def __init__(self, space, design_type, objective, num_samples=200):#1000):
         '''
         From an initial design, it selects the locations with the minimum value according to some objective.
         :param model_space: set to true when the samples need to be obtained for the input domain of the model

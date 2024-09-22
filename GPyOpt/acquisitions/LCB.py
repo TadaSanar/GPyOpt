@@ -24,11 +24,12 @@ class AcquisitionLCB(AcquisitionBase):
 
     analytical_gradient_prediction = True
 
-    def __init__(self, model, space, optimizer=None, cost_withGradients=None, exploration_weight=2):
+    def __init__(self, model, space, optimizer=None, cost_withGradients=None, exploration_weight=10):
         self.optimizer = optimizer
         super(AcquisitionLCB, self).__init__(model, space, optimizer)
+        print('EW: ', exploration_weight)
         self.exploration_weight = exploration_weight
-
+        
         if cost_withGradients is not None:
             print('The set cost function is ignored! LCB acquisition does not make sense with cost.')  
 

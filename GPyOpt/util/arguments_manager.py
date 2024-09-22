@@ -50,7 +50,7 @@ class ArgumentsManager(object):
         acquisition_optimizer = acquisition_optimizer
         cost_withGradients = cost_withGradients
         acquisition_jitter = self.kwargs.get('acquisition_jitter',0.01)
-        acquisition_weight = self.kwargs.get('acquisition_weight',2)
+        acquisition_weight = self.kwargs.get('exploration_weight',2)
         ei_dft_params = self.kwargs.get('acq_fun_params', None) #A Added
         verbose = self.kwargs.get('verbose') #A Added
         

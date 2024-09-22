@@ -49,7 +49,11 @@ class AcquisitionBase(object):
         f_acq_cost = f_acqu/cost_x
         df_acq_cost = (df_acqu*cost_x - f_acqu*cost_grad_x)/(cost_x**2)
         x_z = x if self.space.model_dimensionality == self.space.objective_dimensionality else self.space.zip_inputs(x)
-        return -f_acq_cost*self.space.indicator_constraints(x_z), -df_acq_cost*self.space.indicator_constraints(x_z)
+        if self.space.indicator_constraints(x_z)[0][0] == 0:
+            constant = self.space.indicator_constraints(x_z)
+        else:
+            constant = self.space.indicator_constraints(x_z)
+        return -f_acq_cost*self.space.indicator_constraints(x_z), -df_acq_cost*constant#A-df_acq_cost*self.space.indicator_constraints(x_z) #A Kokeile gradientiksi isoa lukua.
 
     def optimize(self, duplicate_manager=None):
         """

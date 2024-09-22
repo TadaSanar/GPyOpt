@@ -27,10 +27,12 @@ class AcquisitionLCB_DF(AcquisitionBase):
 
     analytical_gradient_prediction = True
 
-    def __init__(self, model, space, optimizer=None, cost_withGradients=None, exploration_weight=2, ei_df_params=None, verbose = True):
+    def __init__(self, model, space, optimizer=None, cost_withGradients=None, exploration_weight=10, ei_df_params=None, verbose = True):
         self.optimizer = optimizer
         super(AcquisitionLCB_DF, self).__init__(model, space, optimizer, cost_withGradients=None)
         self.exploration_weight = exploration_weight
+        print('EW DF: ', exploration_weight, 'DF params is None?: ', ei_df_params==None)
+        
         
         if cost_withGradients is not None:
             print('The set cost function is ignored! LCB acquisition does not make sense with cost.')  
@@ -40,6 +42,8 @@ class AcquisitionLCB_DF(AcquisitionBase):
         #A Added data fusion parameter handling
         
         if ei_df_params is None:
+            
+            raise Exception("Data fusion feature requires a dictionary of data fusion parameters with key 'df_model'. Provide 'None' or a GPy GPRegression model.")
             
             # Default values.
             ei_df_params = {'p_beta': 0.025,
@@ -119,6 +123,8 @@ def calc_P(points, constraint_model, p_beta = 0.025, p_midpoint = 0):
         propability = inv_sigmoid(mean, p_midpoint, p_beta)
     
     else:
+        
+        raise Exception("Data fusion feature requires a dictionary of data fusion parameters with key 'df_model'. Provide 'None' or a GPy GPRegression model.")
         
         # No data fusion data so no grounds for declaring any area less good.
         propability= np.ones(shape = (points.shape[0], 1))

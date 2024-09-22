@@ -44,7 +44,13 @@ class OptLbfgs(Optimizer):
         if f_df is None and df is not None: f_df = lambda x: float(f(x)), df(x)
         if f_df is not None:
             def _f_df(x):
-                return f(x), f_df(x)[1][0]
+                g = f_df(x)[1][0]
+                #g[0] = np.inf
+                #g[1] = np.inf
+                #g[2] = np.inf
+                #print('Grad!')
+                #print(f_df.exploration_weight)
+                return f(x), g #A Tarkista, mitä nolla tekee.
         if f_df is None and df is None:
             #A #res = scipy.optimize.fmin_l_bfgs_b(f, x0=x0, bounds=self.bounds,approx_grad=True, maxiter=self.maxiter)
             #A Added:
@@ -61,7 +67,7 @@ class OptLbfgs(Optimizer):
             factr=1e8,
             pgtol=1e-4,
             maxfun=1e4,
-            maxiter=1e4,
+            maxiter=2,
             maxls=15
             )
 
@@ -72,7 +78,7 @@ class OptLbfgs(Optimizer):
         else:
             result_x = np.atleast_2d(res[0])
             result_fx = np.atleast_2d(res[1])
-
+            #print(x0 - res[0] )
         return result_x, result_fx
 
 
