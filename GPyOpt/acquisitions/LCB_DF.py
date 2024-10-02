@@ -27,13 +27,12 @@ class AcquisitionLCB_DF(AcquisitionBase):
 
     analytical_gradient_prediction = True
 
-    def __init__(self, model, space, optimizer=None, cost_withGradients=None, exploration_weight=10, ei_df_params=None, verbose = True):
+    def __init__(self, model, space, optimizer=None, cost_withGradients=None, exploration_weight=None, ei_df_params=None, verbose = True):
         self.optimizer = optimizer
         super(AcquisitionLCB_DF, self).__init__(model, space, optimizer, cost_withGradients=None)
+        if exploration_weight is None:
+            raise Exception('\nEW is None.\n')
         self.exploration_weight = exploration_weight
-        print('EW DF: ', exploration_weight, 'DF params is None?: ', ei_df_params==None)
-        
-        
         if cost_withGradients is not None:
             print('The set cost function is ignored! LCB acquisition does not make sense with cost.')  
             
@@ -68,6 +67,8 @@ class AcquisitionLCB_DF(AcquisitionBase):
             
         else:
             
+            raise Exception("Data fusion params not forwarded.")
+            
             # Default value.
             self.p_beta = 0.025
 
@@ -76,6 +77,8 @@ class AcquisitionLCB_DF(AcquisitionBase):
             self.p_midpoint = ei_df_params['p_midpoint']
             
         else:
+            
+            raise Exception("Data fusion params not forwarded.")
             
             # Default value.
             self.p_beta = 0

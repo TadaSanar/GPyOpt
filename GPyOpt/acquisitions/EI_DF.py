@@ -33,6 +33,7 @@ class AcquisitionEI_DF(AcquisitionBase):
         
         if ei_df_params is None:
             
+            raise Exception("Data fusion params not forwarded.")
             # Default values.
             ei_df_params = {'p_beta': 0.025,
                          'p_midpoint': 0,
