@@ -44,11 +44,11 @@ class AcquisitionLCB_DF(AcquisitionBase):
             
             raise Exception("Data fusion feature requires a dictionary of data fusion parameters with key 'df_model'. Provide 'None' or a GPy GPRegression model.")
             
-            # Default values.
-            ei_df_params = {'p_beta': 0.025,
-                         'p_midpoint': 0,
-                         'df_model': None
-                         }
+            ## Default values.
+            #ei_df_params = {'p_beta': 0.025,
+            #             'p_midpoint': 0,
+            #             'df_model': None
+            #             }
         
         else:
             
@@ -87,6 +87,7 @@ class AcquisitionLCB_DF(AcquisitionBase):
         """
         Computes the GP-Lower Confidence Bound 
         """
+        
         m, s = self.model.predict(x)   
         f_acqu = -m + self.exploration_weight * s
         
