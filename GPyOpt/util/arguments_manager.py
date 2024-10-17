@@ -3,7 +3,7 @@ from ..models.rfmodel import RFModel
 from ..models.warpedgpmodel import WarpedGPModel
 from ..models.input_warped_gpmodel import InputWarpedGPModel
 from ..core.evaluators import Sequential, RandomBatch, LocalPenalization, ThompsonBatch
-from ..acquisitions import AcquisitionEI, AcquisitionMPI, AcquisitionLCB, AcquisitionEI_MCMC, AcquisitionMPI_MCMC, AcquisitionLCB_MCMC, AcquisitionLP, AcquisitionEI_DF, AcquisitionLCB_DF
+from ..acquisitions import AcquisitionEI, AcquisitionMPI, AcquisitionLCB, AcquisitionEI_MCMC, AcquisitionMPI_MCMC, AcquisitionLCB_MCMC, AcquisitionLP, AcquisitionEI_DF, AcquisitionEI_noisy_DF, AcquisitionEI_noisy, AcquisitionLCB_DF
 from ..core.errors import InvalidConfigError
 
 class ArgumentsManager(object):
@@ -72,10 +72,17 @@ class ArgumentsManager(object):
         
         elif acquisition_type =='LCB_MCMC':
             return AcquisitionLCB_MCMC(model, space, acquisition_optimizer, None, acquisition_weight)
-        # A Added
+        #A Added
         elif acquisition_type =='EI_DF':
             return AcquisitionEI_DF(model, space, acquisition_optimizer, cost_withGradients, acquisition_jitter, ei_dft_params, verbose)
         
+        #A Added
+        elif acquisition_type =='EI_noisy_DF':
+            return AcquisitionEI_noisy_DF(model, space, acquisition_optimizer, cost_withGradients, acquisition_jitter, ei_dft_params, verbose)
+        
+        elif acquisition_type  =='EI_noisy':
+            return AcquisitionEI_noisy(model, space, acquisition_optimizer, cost_withGradients, acquisition_jitter)
+
         elif acquisition_type =='LCB_DF':
             return AcquisitionLCB_DF(model, space, acquisition_optimizer, None, acquisition_weight, ei_dft_params, verbose)
         

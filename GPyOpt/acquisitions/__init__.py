@@ -11,6 +11,8 @@ from .LCB_mcmc import AcquisitionLCB_MCMC
 from .LP import AcquisitionLP
 from .ES import AcquisitionEntropySearch
 from .EI_DF import AcquisitionEI_DF
+from .EI_noisy_DF import AcquisitionEI_noisy_DF
+from .EI_noisy import AcquisitionEI_noisy
 from .LCB_DF import AcquisitionLCB_DF
 
 def select_acquisition(name):
@@ -35,6 +37,10 @@ def select_acquisition(name):
         return AcquisitionEntropySearch
     elif name == 'EI_DF':
         return AcquisitionEI_DF
+    elif name == 'EI_noisy_DF':
+        return AcquisitionEI_noisy_DF
+    elif name == 'EI_noisy':
+        return AcquisitionEI_noisy
     elif name == 'LCB_DF':
         return AcquisitionLCB_DF
     else:
