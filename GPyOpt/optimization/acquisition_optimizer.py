@@ -73,9 +73,9 @@ class AcquisitionOptimizer(object):
         #import matplotlib.pyplot as plt
         #plt.figure()
         #plt.scatter(anchor_points[:,0], anchor_points[:,1])
-        #lt.xlim((0,1))
-        #lt.ylim((0,1))
-        #lt.show()
+        #plt.xlim((0,1))
+        #plt.ylim((0,1))
+        #plt.show()
         
         
         ## --- Applying local optimizers at the anchor points and update bounds of the optimizer (according to the context)
