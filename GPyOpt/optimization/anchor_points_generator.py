@@ -1,7 +1,7 @@
 # Copyright (c) 2016, the GPyOpt Authors
 # Licensed under the BSD 3-clause license (see LICENSE.txt)
 
-import logging
+#import logging
 
 import numpy as np
 
@@ -9,7 +9,7 @@ from ..experiment_design import initial_design
 from ..core.errors import FullyExploredOptimizationDomainError
 from ..core.task.space import Design_space
 
-logger = logging.getLogger(__name__)
+#logger = logging.getLogger(__name__)
 
 
 class AnchorPointsGenerator(object):
@@ -58,8 +58,9 @@ class AnchorPointsGenerator(object):
 
         if len(non_duplicate_anchor_point_indexes) < num_anchor:
             # Since logging has not been setup yet, I do not know how to express warnings...I am using standard print for now.
-            logger.warning("Expecting {} anchor points, only {} available.".format(num_anchor, len(non_duplicate_anchor_point_indexes)))
-
+            #A #logger.warning("Expecting {} anchor points, only {} available.".format(num_anchor, len(non_duplicate_anchor_point_indexes)))
+            print("Expecting {} anchor points, only {} available.".format(num_anchor, len(non_duplicate_anchor_point_indexes))) #A Added
+            
         X = X[non_duplicate_anchor_point_indexes,:]
 
         scores = self.get_anchor_point_scores(X)
